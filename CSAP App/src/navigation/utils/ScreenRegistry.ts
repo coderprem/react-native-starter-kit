@@ -1,4 +1,4 @@
-import HomeScreen from '../../features/home/screens/HomeScreen';
+import HomeScreen from '../../screens/HomeScreen';
 import { ScreenNames } from './ScreenNames';
 import SearchScreen from '../../features/search/screens/SearchScreen';
 
