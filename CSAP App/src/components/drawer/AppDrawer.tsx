@@ -1,71 +1,71 @@
-import React, { useEffect } from 'react';
-import { View, Dimensions, Pressable, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import {
+  View,
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  Animated,
+} from 'react-native';
 import { useDrawer } from '../../providers/DrawerProvider';
 import { Colors } from '../../theme/colors';
-import { navigationRef } from '../../navigation/utils/navigationRef';
 import { IS_TABLET } from '../../utils/device';
 import { AppText } from '../AppText';
-
-const sideMenuData = [
-  {
-    id: 1,
-    title: 'Home',
-    icon: 'home',
-    linkUrl: '/home',
-  },
-];
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const getDrawerWidth = () => {
   if (IS_TABLET) {
-    return 320; // tablet standard
+    return 320;
   }
-  return SCREEN_WIDTH * 0.83; // mobile 80%
+  return SCREEN_WIDTH * 0.83;
 };
 
 const DRAWER_WIDTH = getDrawerWidth();
 
 const AppDrawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isOpen, close } = useDrawer();
-  const translateX = useSharedValue(-DRAWER_WIDTH);
+  const translateX = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
 
   useEffect(() => {
-    translateX.value = withTiming(isOpen ? 0 : -DRAWER_WIDTH, { duration: 250 });
-  }, [isOpen]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  useEffect(() => {
-    const unsubscribe = navigationRef.addListener('state', () => {
-      close();
-    });
-  
-    return unsubscribe;
-  }, [close]);
+    Animated.timing(translateX, {
+      toValue: isOpen ? 0 : -DRAWER_WIDTH,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [isOpen, translateX]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.root}>
       {children}
 
-      {/* Overlay */}
       {isOpen && (
-        <Pressable style={styles.overlay} onPress={close} />
+        <Pressable
+          style={styles.overlay}
+          onPress={close}
+          accessibilityRole="button"
+          accessibilityLabel="Close menu"
+        />
       )}
 
-      {/* Drawer */}
-      <Animated.View style={[styles.drawer, animatedStyle]}>
+      <Animated.View
+        pointerEvents={isOpen ? 'auto' : 'none'}
+        style={[
+          styles.drawer,
+          {
+            transform: [{ translateX }],
+          },
+        ]}
+      >
         <AppText> Drawer Content </AppText>
       </Animated.View>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   drawer: {
     position: 'absolute',
     left: 0,
@@ -76,8 +76,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   overlay: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.blackOpacity60,
+    zIndex: 9,
   },
 });
 

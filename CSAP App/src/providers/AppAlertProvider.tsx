@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  InteractionManager,
 } from 'react-native';
 import { Colors } from '../theme/colors';
 import { windowHeight } from '../utils/device';
@@ -77,7 +76,7 @@ export const AppAlertProvider = ({
   const handlePress = useCallback((button: AlertButton) => {
     hide();
 
-    InteractionManager.runAfterInteractions(() => {
+    queueMicrotask(() => {
       button.onPress?.();
     });
   }, [hide]);

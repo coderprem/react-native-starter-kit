@@ -8,6 +8,7 @@
     "pod-install": "bundle install && cd ios && LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 bundle exec pod install",
     "lint": "eslint .",
     "start": "react-native start",
+    "start:reset": "react-native start --reset-cache",
     "test": "jest"
   },
   "dependencies": {

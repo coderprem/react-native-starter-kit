@@ -3,10 +3,14 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { storage } from '../storage/persistStorage';
 import authReducer from "./slice/auth/authReducer";
 
-let reactotron: any;
+let reactotron: { createEnhancer?: () => unknown } | undefined;
 
 if (__DEV__) {
-  reactotron = require('../config/ReactotronConfig').default;
+  try {
+    reactotron = require('../config/ReactotronConfig').default;
+  } catch {
+    reactotron = undefined;
+  }
 }
 
 const persistConfig = {

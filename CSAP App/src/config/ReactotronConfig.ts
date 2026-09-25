@@ -4,12 +4,19 @@ import { reactotronRedux } from 'reactotron-redux';
 const reactotron = Reactotron.configure({
   name: 'CSAP App',
 })
-  .useReactNative()
-  .use(reactotronRedux())
-  .connect();
+  .useReactNative({
+    overlay: false,
+    storybook: false,
+    devTools: false,
+  })
+  .use(reactotronRedux());
 
 if (__DEV__) {
-  reactotron.clear?.();
+  // Defer until after the RN runtime has finished bootstrapping.
+  queueMicrotask(() => {
+    reactotron.connect();
+    reactotron.clear?.();
+  });
 }
 
 export default reactotron;
