@@ -1,6 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
-import { log } from '../utils/logger';
+ 
 import { AxiosRequestConfig } from 'axios';
+import Logger from '../utils/logger';
 
 let isConnected = true;
 
@@ -53,7 +54,7 @@ export const getNetworkType = async () => {
         return 'noNetwork';
     }
   } catch (error) {
-    log('Error getting network type:', error);
+    Logger.log('Error getting network type:', error);
     return 'noNetwork';
   }
 };

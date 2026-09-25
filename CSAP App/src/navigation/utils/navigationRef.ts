@@ -18,6 +18,7 @@ export function navigate<RouteName extends keyof RootStackParamList>(
   if (navigationRef.isReady()) {
     (navigationRef.navigate as NavigateFn)(name, params);
   }
+  
 }
 
 export function goBack(): void {

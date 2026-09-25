@@ -1,21 +1,24 @@
-let tron: any;
+/* eslint-disable no-console */
+class Logger {
+  devMode = __DEV__;
 
-if (__DEV__) {
-  tron = require('../config/ReactotronConfig').default;
+  log(...args) {
+    if (this.devMode) {
+      console.log(...args);
+    }
+  }
+
+  warn(...args) {
+    if (this.devMode) {
+      console.warn(...args);
+    }
+  }
+
+  error(...args) {
+    if (this.devMode) {
+      console.error(...args);
+    }
+  }
 }
 
-export const log = (...args: any[]) => {
-  if (__DEV__ && tron) {
-    tron.log(...args);
-  } else {
-    console.log(...args);
-  }
-};
-
-export const error = (...args: any[]) => {
-  if (__DEV__ && tron) {
-    tron.error(...args);
-  } else {
-    console.error(...args);
-  }
-};
+export default new Logger();
