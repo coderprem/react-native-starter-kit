@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from 'redux-persist';
-import { storage } from "../storage/mmkv";
+import { storage } from '../storage/persistStorage';
 import authReducer from "./slice/auth/authReducer";
 
 let reactotron: any;

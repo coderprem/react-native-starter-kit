@@ -62,7 +62,7 @@ sourcemap/
 
 # Ruby / CocoaPods
 **/Pods/
-**/vendor/bundle/
+/vendor/bundle/
 *.lock
 
 # Temporary files created by Metro to check the health of the file watcher
@@ -81,8 +81,8 @@ coverage/
 .scannerwork/
 
 # Local Gradle/build output from patched native dependency scripts
-**/src/scripts/**/.gradle/
-**/src/scripts/**/build/
+src/scripts/**/.gradle/
+src/scripts/**/build/
 
 #ios
 iphone/
@@ -95,8 +95,8 @@ iphone/
 !.yarn/sdks
 !.yarn/versions
 # Local environment configurations (should not be committed)
-**/android/gradle.properties
-**/ios/Podfile.lock
+android/gradle.properties
+ios/Podfile.lock
 
 # Local Android build configurations (should not be committed)
-**/android/app/build.gradle
+android/app/build.gradle
