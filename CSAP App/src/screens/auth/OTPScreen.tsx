@@ -15,7 +15,7 @@ import { setAuthenticated } from '../../store/slice/auth/authReducer';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { cw } from '../../utils/dimensions';
-
+import { useEffect } from 'react';
 type OtpRoute = RouteProp<AuthStackParamList, typeof ScreenNames.OTP>;
 
 export default function OTPScreen() {
@@ -23,14 +23,16 @@ export default function OTPScreen() {
   const dispatch = useAppDispatch();
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
-
+useEffect(() => {
+  setOtp('123456');
+}, []);
   const onVerify = () => {
     if (isDemoOtpValid(otp)) {
       setError('');
       dispatch(setAuthenticated(route.params.subscriberId));
       return;
     }
-
+   
     setError('Invalid OTP. Please try again.');
   };
 

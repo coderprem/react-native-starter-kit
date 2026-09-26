@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -13,7 +13,7 @@ import { ScreenNames } from '../../navigation/utils/ScreenNames';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { cw } from '../../utils/dimensions';
-
+ 
 type LoginNavigation = NativeStackNavigationProp<
   AuthStackParamList,
   typeof ScreenNames.LOGIN
@@ -24,6 +24,10 @@ export default function LoginScreen() {
   const [subscriberId, setSubscriberId] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+     setSubscriberId('123456789');
+  }, []);
+
   const onContinue = () => {
     const trimmed = subscriberId.trim();
     if (!trimmed) {
@@ -31,8 +35,8 @@ export default function LoginScreen() {
       return;
     }
 
-    setError('');
-    navigation.navigate(ScreenNames.OTP, { subscriberId: trimmed });
+    // setError('');
+    navigation.navigate(ScreenNames.OTP, { subscriberId: '1234567' });
   };
 
   return (
