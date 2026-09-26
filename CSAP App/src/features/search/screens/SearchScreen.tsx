@@ -28,7 +28,10 @@ const SearchScreen = () => {
       'hi',
     );
     console.log('result', translatedBhashiniText);
-    setTranslatedText(translatedBhashiniText);
+    setTranslatedText(translatedBhashiniText.join(', '));
+  };
+  const removeTranslate = () => {
+    setTranslatedText('');
   };
   return (
     <AppSafeAreaView>
@@ -36,6 +39,9 @@ const SearchScreen = () => {
       <AppText>Translate</AppText>
      </AppButton>
      <AppText>{translatedText}</AppText>
+     <AppButton title="Remove Translate" onPress={removeTranslate}>
+      <AppText>Remove Translate</AppText>
+     </AppButton>
     </AppSafeAreaView>
   );
 };

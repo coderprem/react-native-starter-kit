@@ -1,21 +1,8 @@
-import type {
-  BhashiniTranslateRequest,
-  BhashiniTranslateResponse,
-} from './BhashiniTypes';
+import type {BhashiniTranslateRequest} from './BhashiniTypes';
 
 export class BhashiniTranslationService {
-  private readonly apiUrl =
-    'https://httpbin.org/post';
-
   private readonly cache = new Map<string, string>();
 
-  /**
-   * Translate a single text.
-   * @param text - The text to translate.
-   * @param sourceLanguage - The source language.
-   * @param targetLanguage - The target language.
-   * @returns The translated text.
-   */
   async translate(
     text: string,
     sourceLanguage: string,
@@ -33,13 +20,6 @@ export class BhashiniTranslationService {
 
     return result[0] ?? text;
   }
-  /**
-   * Translate multiple texts in a single request.
-   * @param texts - The texts to translate.
-   * @param sourceLanguage - The source language.
-   * @param targetLanguage - The target language.
-   * @returns The translated texts.
-   */
 
   async translateBatch(
     texts: string[],
@@ -54,8 +34,16 @@ export class BhashiniTranslationService {
       return [];
     }
 
-    const results = new Array<string>(validTexts.length);
+    console.log(
+      '[Bhashini] Translation requested:',
+      {
+        sourceLanguage,
+        targetLanguage,
+        count: validTexts.length,
+      },
+    );
 
+    const results = new Array<string>(validTexts.length);
     const textsToTranslate: string[] = [];
     const missingIndexes: number[] = [];
 
@@ -69,8 +57,21 @@ export class BhashiniTranslationService {
       const cachedTranslation = this.cache.get(cacheKey);
 
       if (cachedTranslation) {
+        console.log('[Bhashini] CACHE HIT:', {
+          text,
+          sourceLanguage,
+          targetLanguage,
+          translation: cachedTranslation,
+        });
+
         results[index] = cachedTranslation;
       } else {
+        console.log('[Bhashini] CACHE MISS:', {
+          text,
+          sourceLanguage,
+          targetLanguage,
+        });
+
         textsToTranslate.push(text);
         missingIndexes.push(index);
       }
@@ -78,50 +79,31 @@ export class BhashiniTranslationService {
 
     // Everything was already available in cache.
     if (!textsToTranslate.length) {
+      console.log(
+        '[Bhashini] Returning all translations from CACHE',
+      );
+
       return results;
     }
-    /**
-     * Translate the texts in a single request.
-     * @param texts - The texts to translate.
-     * @param sourceLanguage - The source language.
-     * @param targetLanguage - The target language.
-     * @returns The translated texts.
-     */
+
+    console.log(
+      '[Bhashini] Calling translation API for:',
+      textsToTranslate,
+    );
+
     const request: BhashiniTranslateRequest = {
       texts: textsToTranslate,
       sourceLanguage,
       targetLanguage,
     };
 
-    const response = await fetch(this.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
-    });
+    const translations = await this.callTranslationApi(
+      request,
+    );
 
-    if (!response.ok) {
-      throw new Error(
-        `Translation request failed: ${response.status}`,
-      );
-    }
-
-    /*
-     * Temporary dummy API response.
-     *
-     * httpbin only echoes our request.
-     * We simulate the translated values below
-     * until the real BE/BHASHINI API is available.
-     */
-    await response.json();
-
-    const translations = textsToTranslate.map(text =>
-      this.getDummyTranslation(
-        text,
-        sourceLanguage,
-        targetLanguage,
-      ),
+    console.log(
+      '[Bhashini] API RESPONSE:',
+      translations,
     );
 
     translations.forEach((translation, index) => {
@@ -135,12 +117,51 @@ export class BhashiniTranslationService {
 
       this.cache.set(cacheKey, translation);
 
+      console.log('[Bhashini] SAVED TO CACHE:', {
+        text: originalText,
+        translation,
+      });
+
       const resultIndex = missingIndexes[index];
 
       results[resultIndex] = translation;
     });
 
+    console.log(
+      '[Bhashini] Final translations:',
+      results,
+    );
+
     return results;
+  }
+
+  private async callTranslationApi(
+    request: BhashiniTranslateRequest,
+  ): Promise<string[]> {
+    console.log(
+      '[Bhashini] MOCK API REQUEST:',
+      request,
+    );
+
+    // Simulate network delay.
+    await new Promise(resolve =>
+      setTimeout(resolve, 500),
+    );
+
+    const translations = request.texts.map(text =>
+      this.getDummyTranslation(
+        text,
+        request.sourceLanguage,
+        request.targetLanguage,
+      ),
+    );
+
+    console.log(
+      '[Bhashini] MOCK API RESPONSE:',
+      translations,
+    );
+
+    return translations;
   }
 
   private getCacheKey(
@@ -160,7 +181,6 @@ export class BhashiniTranslationService {
       sourceLanguage === 'en' &&
       targetLanguage === 'hi'
     ) {
-      //TODO: Remove this once the real API is available.
       const translations: Record<string, string> = {
         'Welcome to CSAP': 'CSAP में आपका स्वागत है',
         'Subscribe now': 'अभी सब्सक्राइब करें',
@@ -171,6 +191,7 @@ export class BhashiniTranslationService {
 
       return translations[text] ?? `[HI] ${text}`;
     }
+
     return `[${targetLanguage.toUpperCase()}] ${text}`;
   }
 }
