@@ -13,6 +13,7 @@ import { ScreenNames } from '../../navigation/utils/ScreenNames';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { cw } from '../../utils/dimensions';
+import {useTranslation} from 'react-i18next';
  
 type LoginNavigation = NativeStackNavigationProp<
   AuthStackParamList,
@@ -23,7 +24,7 @@ export default function LoginScreen() {
   const navigation = useNavigation<LoginNavigation>();
   const [subscriberId, setSubscriberId] = useState('');
   const [error, setError] = useState('');
-
+  const {t} = useTranslation();
   useEffect(() => {
      setSubscriberId('123456789');
   }, []);
@@ -45,7 +46,7 @@ export default function LoginScreen() {
         Welcome
       </AppText>
       <AppSpacer height={24} />
-      <AppText style={styles.label}>Subscriber ID</AppText>
+      <AppText style={styles.label}>{t('auth.login.subscriberId')}</AppText>
       <AppSpacer height={8} />
       <AppInput
         value={subscriberId}
@@ -66,7 +67,7 @@ export default function LoginScreen() {
       ) : null}
       <AppSpacer height={24} />
       <AppButton
-        title="Continue"
+        title={t('auth.login.login')}
         onPress={onContinue}
         accessibilityRole="button"
         accessibilityLabel="Continue to OTP verification"
