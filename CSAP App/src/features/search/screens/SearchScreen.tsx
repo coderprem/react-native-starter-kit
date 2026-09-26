@@ -17,8 +17,13 @@ const SearchScreen = () => {
 
   const handleTranslate = async () => {
     console.log('handleTranslate');
-    const translatedBhashiniText = await bhashiniTranslationService.translate(
-      'Welcome to CSAP',
+    const translatedBhashiniText = await bhashiniTranslationService.translateBatch(
+      [
+        'Welcome to CSAP',
+        'Subscribe now',
+        'View details',
+        'Continue',
+      ],
       'en',
       'hi',
     );
