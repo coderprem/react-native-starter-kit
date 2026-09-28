@@ -43,8 +43,7 @@ export default function LoginScreen() {
       Logger.log('LOGIN RESPONSE:', response);
       navigation.navigate(ScreenNames.OTP, { subscriberId: '1234567' });
     } catch (caughtError) {
-      navigation.navigate(ScreenNames.OTP, { subscriberId: '1234567' });
-      Logger.log('LOGIN_ERROR:', (caughtError as Error).message);
+       Logger.log('LOGIN_ERROR:', (caughtError as Error).message);
     }
   };
 

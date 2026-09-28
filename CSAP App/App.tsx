@@ -6,6 +6,7 @@ import { useDrawer } from './src/providers/DrawerProvider';
 import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { translationStore } from './src/services/bhashini/DynamicTranslationStore';
+import { GlobalErrorProvider } from './src/providers/GlobalErrorProvider';
 function AppNavigation() {
   const { close } = useDrawer();
 
@@ -46,7 +47,9 @@ function AppNavigation() {
 function App() {
   return (
     <Providers>
-      <AppNavigation />
+      <GlobalErrorProvider>
+        <AppNavigation />
+      </GlobalErrorProvider>
     </Providers>
   );
 }

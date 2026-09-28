@@ -1,4 +1,5 @@
 import {ApiError} from './apiError';
+import GlobalErrorService from './GlobalErrorService';
 
 export class CommonErrorHandler {
   static handle(error: ApiError): boolean {
@@ -33,24 +34,20 @@ export class CommonErrorHandler {
     error: ApiError,
   ): void {
     console.log('COMMON ERROR: Not found', error.message);
-
-    // Show common not found message
+    GlobalErrorService.show('Not found', error.message);  
   }
   private static handleUnauthorized(
     error: ApiError,
   ): void {
     console.log('COMMON ERROR: Unauthorized', error.message);
-
-    // Clear authentication/session
-    // Navigate to Login
-    // etc.
+    GlobalErrorService.show('Unauthorized', error.message);
   }
 
   private static handleRateLimit(
     error: ApiError,
   ): void {
     console.log('COMMON ERROR: Too many requests', error.message);
-
+    GlobalErrorService.show('Too many requests', error.message);
     // Show common rate-limit message
   }
 
@@ -58,14 +55,14 @@ export class CommonErrorHandler {
     error: ApiError,
   ): void {
     console.log('COMMON ERROR: Server error', error.message);
-
+    GlobalErrorService.show('Server error', error.message);
     // Show common server error message
   }
   private static handleUnknownError(
     error: ApiError,
   ): void {
     console.log('COMMON ERROR: Unknown error', error.message);
-
+    GlobalErrorService.show('Unknown error', error.message);
     // Show common unknown error message
   }
 }
