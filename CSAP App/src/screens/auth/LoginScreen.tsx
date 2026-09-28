@@ -14,6 +14,7 @@ import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { cw } from '../../utils/dimensions';
 import {useTranslation} from 'react-i18next';
+import { login } from './authService';
  
 type LoginNavigation = NativeStackNavigationProp<
   AuthStackParamList,
@@ -29,15 +30,21 @@ export default function LoginScreen() {
      setSubscriberId('123456789');
   }, []);
 
-  const onContinue = () => {
+  const onContinue = async () => {
     const trimmed = subscriberId.trim();
     if (!trimmed) {
       setError('Please enter your Subscriber ID');
       return;
     }
-
-    // setError('');
-    navigation.navigate(ScreenNames.OTP, { subscriberId: '1234567' });
+    try {
+    const response = await login({
+        subscriberId: trimmed,
+      });
+      console.log('LOGIN RESPONSE:', response);
+      navigation.navigate(ScreenNames.OTP, { subscriberId: '1234567' });
+    } catch (caughtError) {
+      console.log('LOGIN_ERROR:', (caughtError as Error).message);
+     }
   };
 
   return (
