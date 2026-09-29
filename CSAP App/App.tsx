@@ -5,8 +5,13 @@ import RootNavigator from './src/navigation/navigators/RootNavigator';
 import { useDrawer } from './src/providers/DrawerProvider';
 import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
+import codePush from 'react-native-code-push';
 import { translationStore } from './src/services/bhashini/DynamicTranslationStore';
 import { GlobalErrorProvider } from './src/providers/GlobalErrorProvider';
+
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.MANUAL,
+};
 function AppNavigation() {
   const { close } = useDrawer();
 
@@ -45,6 +50,13 @@ function AppNavigation() {
 }
 
 function App() {
+  useEffect(() => {
+    codePush.sync({
+      installMode: codePush.InstallMode.IMMEDIATE,
+      mandatoryInstallMode: codePush.InstallMode.IMMEDIATE,
+    });
+  }, []);
+
   return (
     <Providers>
       <GlobalErrorProvider>
@@ -54,4 +66,4 @@ function App() {
   );
 }
 
-export default App;
+export default codePush(codePushOptions)(App);

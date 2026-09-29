@@ -24,6 +24,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CodePushDeploymentKey</key>
+	<string>YOUR_IOS_CODEPUSH_DEPLOYMENT_KEY</string>
+	<key>CodePushServerURL</key>
+	<string>https://api.appcenter.ms/v0.1/public/codepush/</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

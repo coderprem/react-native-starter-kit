@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if DEBUG
       RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
 #else
-      Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+      CodePush.bundleURL()
 #endif
     }
   }
